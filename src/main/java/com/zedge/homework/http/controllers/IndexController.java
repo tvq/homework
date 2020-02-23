@@ -1,20 +1,34 @@
 package com.zedge.homework.http.controllers;
 
-import com.zedge.homework.models.User;
-import com.zedge.homework.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-@RestController
+@Controller
 public class IndexController {
-    @Autowired
-    private UserRepository repository;
+    @Value("classpath:swagger.yaml")
+    private Resource swaggerYaml;
 
     @GetMapping("/")
-    public List<User> index() {
-        return repository.findAll();
+    public String index(Model model) throws IOException {
+        Reader reader = new InputStreamReader(swaggerYaml.getInputStream());
+        String yaml = FileCopyUtils.copyToString(reader);
+
+        ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
+        ObjectMapper jsonWriter = new ObjectMapper();
+        String swaggerJson = jsonWriter.writeValueAsString(yamlReader.readValue(yaml, Object.class));
+//System.out.println(swaggerJson);
+
+        model.addAttribute("documentation", swaggerJson );
+        return "index";
     }
 }

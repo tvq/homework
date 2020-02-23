@@ -1,0 +1,25 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: Top5 albums of my favourite artist
+  description: Homework task for Zedge
+servers:
+  - url: http://localhost:8080
+paths:
+  /search:
+    get:
+      description: Search artists on iTunes
+      operationId: searchArtists
+      parameters:
+        - name: artist
+          in: query
+          description: filter by artist
+          required: true
+          schema:
+            type: string
+            example: abba
+      responses:
+        200:
+          description: iTunes artist response
+        401:
+          description: unauthorized

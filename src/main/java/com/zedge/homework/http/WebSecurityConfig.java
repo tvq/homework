@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/assets/**").permitAll()
                 .anyRequest().authenticated()
             .and()
             .apply(new TokenConfigurer(repository));
