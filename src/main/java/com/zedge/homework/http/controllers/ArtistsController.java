@@ -1,6 +1,5 @@
 package com.zedge.homework.http.controllers;
 
-import com.zedge.homework.models.Album;
 import com.zedge.homework.models.Artist;
 import com.zedge.homework.services.SearchApi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +13,11 @@ public class ArtistsController {
     @Autowired
     private SearchApi iTunes;
 
-    @GetMapping("/search")
+    @GetMapping("/artists/search")
     @ResponseBody
-    public List<Artist> search(@RequestParam(name = "artist", required = false, defaultValue = "aba") String artist) throws IOException {
-        return iTunes.search(artist);
-    }
+    public List<Artist> search(@RequestParam(name = "artist", required = false, defaultValue = "aba") String artist)
+            throws IOException {
 
-    @GetMapping("/artists/{amgArtistId}")
-    public List<Album> show(@PathVariable int amgArtistId) throws IOException {
-        return iTunes.getTop5Albums(amgArtistId);
+        return iTunes.search(artist);
     }
 }

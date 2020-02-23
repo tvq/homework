@@ -3,13 +3,18 @@ info:
   version: 0.0.1
   title: Top5 albums of my favourite artist
   description: Homework task for Zedge
+  contact:
+    name: Tomasz
+    email: tomasz@humhubs.com
 servers:
   - url: http://localhost:8080
 paths:
-  /search:
+  /artists/search:
     get:
       description: Search artists on iTunes
       operationId: searchArtists
+      security:
+        - bearerAuth: []
       parameters:
         - name: artist
           in: query
@@ -21,5 +26,34 @@ paths:
       responses:
         200:
           description: iTunes artist response
-        401:
+        403:
           description: unauthorized
+  /artists/{amgArtistId}/albums/top5:
+    get:
+      description: search artist's top 5 albums
+      operationId: getTop5Albums
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: amgArtistId
+          in: path
+          description: iTunes artist's amg id
+          required: true
+          schema:
+            type: integer
+            example: 3492
+      responses:
+        200:
+          description: iTunes albums
+        403:
+          description: unauthorized
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: |
+        ##### Possible _values_ for bearer token are:
+          * secret_jan
+          * secret_tomek
+          * secret_vemund

@@ -6,15 +6,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-public class TokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class BearerAuthConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     private AuthRepository repository;
 
-    public TokenConfigurer(AuthRepository repository) {
+    public BearerAuthConfigurer(AuthRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public void configure(HttpSecurity builder) throws Exception {
-        builder.addFilterBefore(new TokenFilter(repository), UsernamePasswordAuthenticationFilter.class);
+        builder.addFilterBefore(new BearerAuthFilter(repository), UsernamePasswordAuthenticationFilter.class);
     }
 }

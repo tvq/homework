@@ -1,4 +1,4 @@
-package com.zedge.homework.services;
+package com.zedge.homework.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;

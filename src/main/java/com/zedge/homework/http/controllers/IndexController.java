@@ -25,10 +25,9 @@ public class IndexController {
 
         ObjectMapper yamlReader = new ObjectMapper(new YAMLFactory());
         ObjectMapper jsonWriter = new ObjectMapper();
-        String swaggerJson = jsonWriter.writeValueAsString(yamlReader.readValue(yaml, Object.class));
-//System.out.println(swaggerJson);
+        String swaggerSpec = jsonWriter.writeValueAsString(yamlReader.readValue(yaml, Object.class));
 
-        model.addAttribute("documentation", swaggerJson );
+        model.addAttribute("documentation", swaggerSpec);
         return "index";
     }
 }

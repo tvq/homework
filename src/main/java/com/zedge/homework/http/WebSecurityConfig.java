@@ -25,6 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/assets/**").permitAll()
                 .anyRequest().authenticated()
             .and()
-            .apply(new TokenConfigurer(repository));
+            .apply(new BearerAuthConfigurer(repository));
     }
 }

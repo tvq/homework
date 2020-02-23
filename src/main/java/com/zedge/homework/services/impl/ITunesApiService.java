@@ -1,4 +1,4 @@
-package com.zedge.homework.services;
+package com.zedge.homework.services.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.zedge.homework.models.Album;
 import com.zedge.homework.models.Artist;
+import com.zedge.homework.services.SearchApi;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,7 +18,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class ITunesApiService implements SearchApi {
@@ -36,7 +37,7 @@ public class ITunesApiService implements SearchApi {
     }
 
     @Override
-    public List<Album> getTop5Albums(int amgArtistId) throws IOException  {
+    public List<Album> getTop5Albums(int amgArtistId)  {
         HttpRequest request = makeGetRequest("https://itunes.apple.com/lookup?amgArtistId=" + amgArtistId + "&entity=album&limit=5");
         String jsonString = callRequest(request);
 
@@ -60,7 +61,7 @@ public class ITunesApiService implements SearchApi {
                 }
             }
         } catch (Exception e) {
-            // handle or throw exception
+            // todo make nice handle or throw exception
         }
 
         return filtered;
@@ -80,7 +81,7 @@ public class ITunesApiService implements SearchApi {
                     .thenApply(HttpResponse::body)
                     .get();
         } catch (Exception e) {
-            // handle or throw exception
+            // todo make nice handle or throw exception
         }
 
         return "'{}'";

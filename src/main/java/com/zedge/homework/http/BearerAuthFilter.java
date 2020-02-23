@@ -11,10 +11,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class TokenFilter extends GenericFilterBean {
+public class BearerAuthFilter extends GenericFilterBean {
     private AuthRepository repository;
 
-    public TokenFilter(AuthRepository repository) {
+    public BearerAuthFilter(AuthRepository repository) {
         this.repository = repository;
     }
 
@@ -22,17 +22,20 @@ public class TokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        String token = null;
-        String bearerToken = ((HttpServletRequest) request).getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            token = bearerToken.substring(7, bearerToken.length());
-        }
-
+        String token = extractAuthorizationToken(((HttpServletRequest) request).getHeader("Authorization"));
         if (token != null) {
             SecurityContextHolder.getContext()
                     .setAuthentication(repository.getAuthentication(token));
         }
 
         chain.doFilter(request, response);
+    }
+
+    public String extractAuthorizationToken(String bearerToken) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7, bearerToken.length());
+        }
+
+        return null;
     }
 }
